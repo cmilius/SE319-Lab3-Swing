@@ -41,10 +41,10 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JTree;
 
-public class Lab3ServerClient extends JFrame {
+public class Lab3Client extends JFrame {
 
 	private JPanel contentPane;
-	private static Lab3ServerClient frame;
+	private static Lab3Client frame;
 	private static JList<String> list;
 	private DataModel model;
 	private Socket socket;
@@ -56,7 +56,7 @@ public class Lab3ServerClient extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					frame = new Lab3ServerClient();
+					frame = new Lab3Client();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -70,7 +70,7 @@ public class Lab3ServerClient extends JFrame {
 	 * 
 	 * @throws FileNotFoundException
 	 */
-	public Lab3ServerClient() throws FileNotFoundException, UnknownHostException,
+	public Lab3Client() throws FileNotFoundException, UnknownHostException,
 	IOException, InterruptedException{
 		setTitle("Tabbed Swing Application");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,29 +101,43 @@ public class Lab3ServerClient extends JFrame {
 		list.setModel(model);
 		panel_1.add(scrollPane);
 
+		//add company button
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				//show the input option pane
 				String input = (String) JOptionPane.showInputDialog(frame,
 						"What is the new company?", "Enter new company name",
 						JOptionPane.PLAIN_MESSAGE, null, null, "");
+				
+				//if the input isn't null and longer than nothing
 				if ((input != null) && (input.length() > 0)) {
+					
 					try {
+						//connect to the server locally
 						socket = new Socket("localhost", 4444);
+						
+						//wait for it to connect
 						Thread.sleep(1000);
+						
+						//declare a printwriter object to send a stream to the server
 						PrintWriter out = new PrintWriter(socket.getOutputStream());
 						out.println(input);
 						out.flush();
 					} catch (IOException e2) {
 						e2.printStackTrace();
 					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					
 					try {
+						//wait for server to do it's task
+						Thread.sleep(1000);
+						
+						//update the list from the DataModel
 						list.setModel(new DataModel());
-					} catch (FileNotFoundException e1) {
+					} catch (FileNotFoundException | InterruptedException e1) {
 						e1.printStackTrace();
 					}
 				}
@@ -132,19 +146,46 @@ public class Lab3ServerClient extends JFrame {
 		btnAdd.setBounds(95, 188, 89, 23);
 		panel_1.add(btnAdd);
 
+		//remove button
 		JButton btnRemove = new JButton("Remove");
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//get the selected item
 				String item = list.getSelectedValue();
-				model.removeComp(item);
+				
+				//add a remove flag to the message
+				String input = "r3m0ve " + item;
 				
 				try {
+					//connect to the server locally
+					socket = new Socket("localhost", 4444);
+					
+					//wait for it to connect
+					Thread.sleep(1000);
+					
+					//declare a printwriter object to send a stream to the server
+					PrintWriter out = new PrintWriter(socket.getOutputStream());
+					out.println(input);
+					out.flush();
+				} catch (IOException e2) {
+					e2.printStackTrace();
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				
+				
+				try {
+					//wait for server to do it's task
+					Thread.sleep(1000);
+					
+					//update the list from the DataModel
 					list.setModel(new DataModel());
-				} catch (FileNotFoundException e) {
+				} catch (FileNotFoundException | InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 		});
+		
 		btnRemove.setBounds(213, 188, 89, 23);
 		panel_1.add(btnRemove);
 		Panel panel = new Panel();

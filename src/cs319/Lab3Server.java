@@ -41,13 +41,11 @@ public class Lab3Server {
 			try {
 
 				// 2.1 WAIT FOR CLIENT TO TRY TO CONNECT TO SERVER
-				System.out.println("Waiting for client " + (clientNum + 1)
-						+ " to connect!");
+				System.out.println("Waiting for client " + (clientNum + 1) + " to connect!");
 				clientSocket = serverSocket.accept();
 
 				// 2.2 SPAWN A THREAD TO HANDLE CLIENT REQUEST
-				System.out.println("Server got connected to a client"
-						+ ++clientNum);
+				System.out.println("Server got connected to a client" + ++clientNum);
 				Thread t = new Thread(new ClientHandler1(clientSocket, clientNum));
 				t.start();
 
@@ -85,10 +83,28 @@ class ClientHandler1 implements Runnable {
 			String clientMessage = in.nextLine();
 			
 			try {
-				PrintWriter out = new PrintWriter(new FileWriter("companies.txt",true));
-				out.println();
-				out.append(clientMessage);
-				out.close();
+				//if we got the remove flag
+				if(clientMessage.contains("r3m0ve ")){
+					
+					//remove the r3m0ve flag
+					StringBuilder message = new StringBuilder(clientMessage);
+					message.delete(0, 7);
+					
+					System.out.println("Removing " + message.toString());
+					
+					//remove it from the txt file using DataModel
+					DataModel data = new DataModel();
+					data.removeComp(message.toString());
+					data = null;
+					
+				}
+				else{
+					//write the message that was sent to the end of the file
+					PrintWriter out = new PrintWriter(new FileWriter("companies.txt",true));
+					out.println();
+					out.append(clientMessage);
+					out.close();
+				}
 			} 
 			catch (FileNotFoundException e1) {
 				e1.printStackTrace();
