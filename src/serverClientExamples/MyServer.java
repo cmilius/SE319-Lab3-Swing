@@ -1,4 +1,4 @@
-package cs319;
+package serverClientExamples;
 
 // GOALS
 //

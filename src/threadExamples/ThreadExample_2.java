@@ -1,4 +1,4 @@
-package cs319;
+package threadExamples;
 
 // GOALS 
 // 1. Create Thread by implementing Runnable (second way to create thread!)

@@ -1,4 +1,4 @@
-package cs319;
+package threadExamples;
 
 // GOALS 
 // 1. To show race condition causing problems when threads use same resource

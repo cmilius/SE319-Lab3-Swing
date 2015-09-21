@@ -1,4 +1,4 @@
-package cs319;
+package threadExamples;
 
 // GOALS 
 // 1. To show use of synchronized statement to fix race condition

@@ -1,4 +1,4 @@
-package cs319;
+package serverClientExamples;
 
 //GOALS
 // 1. to show client code that connects to the server and sends it a message

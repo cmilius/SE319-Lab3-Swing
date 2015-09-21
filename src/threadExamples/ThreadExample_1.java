@@ -1,4 +1,4 @@
-package cs319;
+package threadExamples;
 
 // GOALS 
 // 1. Create Thread by Extending Thread
@@ -18,11 +18,7 @@ public class ThreadExample_1 {
 		for (int i = 0; i < 100; i++) {
 			threadArray[i].start();
 		}
-
 	}
-	
-	
-
 }
 
 class MyThread extends Thread {
